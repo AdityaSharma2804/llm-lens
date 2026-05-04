@@ -1,36 +1,66 @@
 import time
 import functools
+from dataclasses import dataclass, field
 from contextlib import contextmanager
+from datetime import datetime, timezone
 
 
-def add(a, b):
-    """Original test function — will remove later."""
-    return a + b
+@dataclass
+class CallRecord:
+    func_name: str
+    latency_ms: float
+    status: str          # "ok" or "error"
+    error: str | None
+    timestamp: str = field(
+        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+    )
 
 
-@contextmanager
-def track_latency(label: str):
-    """Context manager that measures and prints elapsed time."""
-    start = time.perf_counter()
-    try:
-        yield
-    finally:
-        elapsed = time.perf_counter() - start
-        print(f"[{label}] took {elapsed * 1000:.2f}ms")
+# In-memory store — abhi ke liye simple list
+_records: list[CallRecord] = []
 
 
 def track(func):
-    """Decorator that wraps any function and logs its latency."""
+    """Decorator: wraps any function, logs latency and status."""
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         start = time.perf_counter()
         try:
             result = func(*args, **kwargs)
             elapsed = (time.perf_counter() - start) * 1000
-            print(f"[{func.__name__}] OK — {elapsed:.2f}ms")
+            record = CallRecord(
+                func_name=func.__name__,
+                latency_ms=round(elapsed, 2),
+                status="ok",
+                error=None,
+            )
+            _records.append(record)
             return result
         except Exception as e:
             elapsed = (time.perf_counter() - start) * 1000
-            print(f"[{func.__name__}] ERROR — {elapsed:.2f}ms — {e}")
+            record = CallRecord(
+                func_name=func.__name__,
+                latency_ms=round(elapsed, 2),
+                status="error",
+                error=str(e),
+            )
+            _records.append(record)
             raise
     return wrapper
+
+
+def get_records() -> list[CallRecord]:
+    """Returns all tracked call records."""
+    return list(_records)
+
+
+@contextmanager
+def track_latency(label: str):
+    """Context manager for manually timing a block."""
+    start = time.perf_counter()
+    try:
+        yield
+    finally:
+        elapsed = (time.perf_counter() - start) * 1000
+        print(f"[{label}] {elapsed:.2f}ms")
+        
