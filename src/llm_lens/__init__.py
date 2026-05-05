@@ -1,4 +1,4 @@
 __version__ = "0.1.0"
 
-def hello():
-	print("llm-lens " + __version__)
+from llm_lens.patch import patch_all
+patch_all()
