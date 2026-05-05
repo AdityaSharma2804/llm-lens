@@ -65,3 +65,18 @@ def get_records():
     rows = conn.execute("SELECT * FROM calls ORDER BY id DESC").fetchall()
     conn.close()
     return [dict(row) for row in rows]
+
+def get_stats():
+    conn = _get_connection()
+    row = conn.execute("""
+        SELECT
+            COUNT(*) as total,
+            SUM(CASE WHEN status = 'error' THEN 1 ELSE 0 END) as errors,
+            ROUND(AVG(latency_ms), 2) as avg_latency,
+            ROUND(SUM(cost_usd), 6) as total_cost
+        FROM calls
+    """).fetchone()
+    conn.close()
+    return dict(row)
+
+
