@@ -32,6 +32,7 @@ def main():
     table.add_column("Status", style="bold")
     table.add_column("Latency (ms)", justify="right")
     table.add_column("Error")
+    table.add_column("Timestamp", style="dim")
 
     for r in records:
         color = "green" if r["status"] == "ok" else "red"
@@ -39,8 +40,10 @@ def main():
             r["func"],
             f"[{color}]{r['status']}[/{color}]",
             str(r["latency_ms"]),
-            r["error"] or "-"
+            r["error"] or "-",
+            r["timestamp"]
         )
 
     console.print(table)
     console.print(f"\n[bold]Total calls:[/bold] {len(records)}")
+
