@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>llm-lens dashboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    body { font-family: monospace; background: #0f0f0f; color: #e0e0e0; padding: 2rem; }
+    h1 { color: #4ade80; margin-bottom: 2rem; }
+    .stats { display: flex; gap: 2rem; margin-bottom: 3rem; }
+    .stat-box { background: #1a1a1a; border: 1px solid #333; padding: 1rem 2rem; border-radius: 8px; }
+    .stat-box .label { font-size: 0.75rem; color: #888; }
+    .stat-box .value { font-size: 2rem; color: #4ade80; font-weight: bold; }
+    .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .chart-box { background: #1a1a1a; border: 1px solid #333; padding: 1.5rem; border-radius: 8px; }
+    .chart-box h2 { font-size: 0.9rem; color: #888; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>llm-lens</h1>
+
+  <div class="stats">
+    <div class="stat-box">
+      <div class="label">TOTAL CALLS</div>
+      <div class="value" id="total">-</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">ERROR RATE</div>
+      <div class="value" id="error-rate">-</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">AVG LATENCY</div>
+      <div class="value" id="avg-latency">-</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">TOTAL COST</div>
+      <div class="value" id="total-cost">-</div>
+    </div>
+  </div>
+
+  <div class="charts">
+    <div class="chart-box">
+      <h2>LATENCY PER CALL (ms)</h2>
+      <canvas id="latency-chart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h2>ERRORS PER CALL</h2>
+      <canvas id="error-chart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const API = "http://localhost:8000";
+
+    async function loadStats() {
+      const res = await fetch(API + "/stats");
+      const s = await res.json();
+      const total = s.total || 0;
+      const errors = s.errors || 0;
+      const rate = total > 0 ? ((errors / total) * 100).toFixed(1) : "0.0";
+      document.getElementById("total").textContent = total;
+      document.getElementById("error-rate").textContent = rate + "%";
+      document.getElementById("avg-latency").textContent = (s.avg_latency || 0) + "ms";
+      document.getElementById("total-cost").textContent = "$" + (s.total_cost || 0).toFixed(4);
+    }
+
+    async function loadCharts() {
+      const res = await fetch(API + "/calls");
+      const calls = await res.json();
+      const reversed = calls.slice().reverse();
+
+      const labels = reversed.map((c, i) => i + 1);
+      const latencies = reversed.map(c => c.latency_ms);
+      const errors = reversed.map(c => c.status === "error" ? 1 : 0);
+
+      new Chart(document.getElementById("latency-chart"), {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Latency (ms)",
+            data: latencies,
+            borderColor: "#4ade80",
+            backgroundColor: "rgba(74,222,128,0.1)",
+            tension: 0.3,
+            pointRadius: 2,
+          }]
+        },
+        options: { plugins: { legend: { display: false } }, scales: { x: { display: false } } }
+      });
+
+      new Chart(document.getElementById("error-chart"), {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Error",
+            data: errors,
+            backgroundColor: errors.map(e => e ? "#f87171" : "#4ade80"),
+          }]
+        },
+        options: { plugins: { legend: { display: false } }, scales: { x: { display: false } } }
+      });
+    }
+
+    loadStats();
+    loadCharts();
+  </script>
+</body>
+</html>
