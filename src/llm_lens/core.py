@@ -15,12 +15,16 @@ def _init_db():
     conn = _get_connection()
     conn.execute("""
         CREATE TABLE IF NOT EXISTS calls (
-            id         INTEGER PRIMARY KEY AUTOINCREMENT,
-            func       TEXT    NOT NULL,
-            latency_ms REAL    NOT NULL,
-            status     TEXT    NOT NULL,
-            error      TEXT,
-            timestamp  TEXT    NOT NULL DEFAULT (datetime('now'))
+            id            INTEGER PRIMARY KEY AUTOINCREMENT,
+            func          TEXT    NOT NULL,
+            latency_ms    REAL    NOT NULL,
+            status        TEXT    NOT NULL,
+            error         TEXT,
+            timestamp     TEXT    NOT NULL DEFAULT (datetime('now')),
+            input_tokens  INTEGER,
+            output_tokens INTEGER,
+            cost_usd      REAL,
+            model         TEXT
         )
     """)
     conn.commit()
@@ -28,11 +32,15 @@ def _init_db():
 
 _init_db()
 
-def _insert_record(func, latency_ms, status, error):
+def _insert_record(func, latency_ms, status, error,
+                   input_tokens=None, output_tokens=None,
+                   cost_usd=None, model=None):
     conn = _get_connection()
     conn.execute(
-        "INSERT INTO calls (func, latency_ms, status, error) VALUES (?, ?, ?, ?)",
-        (func, latency_ms, status, error)
+        """INSERT INTO calls
+           (func, latency_ms, status, error, input_tokens, output_tokens, cost_usd, model)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+        (func, latency_ms, status, error, input_tokens, output_tokens, cost_usd, model)
     )
     conn.commit()
     conn.close()
