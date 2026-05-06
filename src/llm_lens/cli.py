@@ -3,7 +3,7 @@ import time
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
-from llm_lens.core import track, get_records, get_stats
+from llm_lens.core import track, get_records, get_stats, set_config, check_cost_alert
 
 console = Console()
 
@@ -74,9 +74,28 @@ def show_stats():
         title="[bold green]llm-lens stats[/bold green]"
     ))
 
+    alert = check_cost_alert()
+    if alert:
+        console.print(Panel.fit(
+            f"[bold red]Cost threshold breached![/bold red]\n"
+            f"Threshold: ${alert['threshold']:.6f}\n"
+            f"Total spend: ${alert['total']}",
+            title="[bold red]ALERT[/bold red]",
+            border_style="red"
+        ))
+
 def serve():
     import uvicorn
     uvicorn.run("llm_lens.server:app", host="0.0.0.0", port=8000, reload=True)
+
+def show_config():
+    if len(sys.argv) < 5:
+        console.print("Usage: llm-lens config set cost_alert_usd 0.10")
+        return
+    key = sys.argv[3]
+    value = float(sys.argv[4])
+    set_config(key, value)
+    console.print(f"[green]Config updated:[/green] {key} = {value}")
 
 def main():
     console.print("[bold green]llm-lens[/bold green] is running!\n")
@@ -85,5 +104,7 @@ def main():
         show_stats()
     elif len(sys.argv) > 1 and sys.argv[1] == "serve":
         serve()
+    elif len(sys.argv) > 1 and sys.argv[1] == "config":
+        show_config()
     else:
         show_table()

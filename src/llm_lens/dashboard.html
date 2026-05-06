@@ -21,6 +21,10 @@
   <h1>llm-lens</h1>
   <div class="updated">last updated: <span id="updated-at">-</span></div>
 
+  <div id="alert-banner" style="display:none; background:#7f1d1d; border:1px solid #ef4444; color:#fca5a5; padding:1rem 2rem; border-radius:8px; margin-bottom:2rem;">
+    Cost threshold breached! Total spend: $<span id="alert-total">0</span> — Threshold: $<span id="alert-threshold">0</span>
+  </div>
+
   <div class="stats">
     <div class="stat-box">
       <div class="label">TOTAL CALLS</div>
@@ -112,9 +116,23 @@
       document.getElementById("updated-at").textContent = new Date().toLocaleTimeString();
     }
 
+    async function loadAlert() {
+      const res = await fetch(API + "/alert");
+      const data = await res.json();
+      const banner = document.getElementById("alert-banner");
+      if (data.alert) {
+        document.getElementById("alert-total").textContent = data.alert.total;
+        document.getElementById("alert-threshold").textContent = data.alert.threshold;
+        banner.style.display = "block";
+      } else {
+        banner.style.display = "none";
+      }
+    }
+
     async function refresh() {
       await loadStats();
       await loadCharts();
+      await loadAlert();
     }
 
     refresh();
@@ -122,3 +140,4 @@
   </script>
 </body>
 </html>
+

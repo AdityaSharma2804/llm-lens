@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pathlib import Path
-from llm_lens.core import get_records, get_stats
+from llm_lens.core import get_records, get_stats, check_cost_alert
 
 app = FastAPI(title="llm-lens")
 
@@ -26,7 +26,11 @@ def calls():
 def stats():
     return get_stats()
 
+@app.get("/alert")
+def alert():
+    result = check_cost_alert()
+    return {"alert": result}
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
-

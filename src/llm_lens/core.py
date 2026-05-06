@@ -1,9 +1,11 @@
 import time
 import sqlite3
 import functools
+import json
 from pathlib import Path
 
 DB_PATH = Path.home() / ".llm_lens" / "calls.db"
+CONFIG_PATH = Path.home() / ".llm_lens" / "config.json"
 
 def _get_connection():
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -79,4 +81,28 @@ def get_stats():
     conn.close()
     return dict(row)
 
+def get_config():
+    if not CONFIG_PATH.exists():
+        return {}
+    with open(CONFIG_PATH) as f:
+        return json.load(f)
 
+def set_config(key, value):
+    config = get_config()
+    config[key] = value
+    CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(CONFIG_PATH, "w") as f:
+        json.dump(config, f, indent=2)
+
+def check_cost_alert():
+    config = get_config()
+    threshold = config.get("cost_alert_usd")
+    if threshold is None:
+        return None
+    conn = _get_connection()
+    row = conn.execute("SELECT SUM(cost_usd) as total FROM calls").fetchone()
+    conn.close()
+    total = row["total"] or 0.0
+    if total >= threshold:
+        return {"threshold": threshold, "total": round(total, 6)}
+    return None
