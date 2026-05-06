@@ -76,7 +76,7 @@ def show_stats():
 
 def serve():
     import uvicorn
-    uvicorn.run("llm_lens.server:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("llm_lens.server:app", host="0.0.0.0", port=8000, reload=True)
 
 def main():
     console.print("[bold green]llm-lens[/bold green] is running!\n")
