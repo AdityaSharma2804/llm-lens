@@ -24,7 +24,7 @@ No SDK changes. No account setup. No config files.
 ## Installation
 
 ```bash
-pip install llm-lens
+pip install llm-lens-py
 ```
 
 ---
@@ -107,5 +107,4 @@ Python · FastAPI · SQLite · Vanilla JS · Chart.js · Docker · Render
 
 ## Status
 
-Active development. Built in 12 days as a learning project.  
-Feedback and PRs welcome.
+Active development. Feedback and PRs welcome.

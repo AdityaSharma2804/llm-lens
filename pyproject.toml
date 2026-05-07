@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "llm-lens"
-version = "0.1.0"
+name = "llm-lens-py"
+version = "0.1.2"
 description = "Automatic observability for LLM API calls"
 requires-python = ">=3.10"
 dependencies = [
@@ -12,6 +12,7 @@ dependencies = [
     "fastapi>=0.110.0",
     "uvicorn>=0.29.0",
 ]
+readme = "README.md"
 
 [project.scripts]
 llm-lens = "llm_lens.cli:main"
