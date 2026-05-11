@@ -7,7 +7,7 @@ Tracks latency, token usage, cost, and errors — with a live web dashboard.
 [![Python](https://img.shields.io/badge/python-3.10+-blue)](https://pypi.org/project/llm-lens-py/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-![llm-lens dashboard](docs/dashboard.png)
+![llm-lens dashboard](https://raw.githubusercontent.com/AdityaSharma2804/llm-lens/main/assets/dashboard.png)
 
 ---
 
