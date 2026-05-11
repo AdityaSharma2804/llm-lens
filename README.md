@@ -181,7 +181,7 @@ src/llm_lens/
 ## Links
 
 - [PyPI](https://pypi.org/project/llm-lens-py/)
-- [Live demo](https://llm-lens.onrender.com)
+- [Live demo](https://llm-lens.onrender.com) *(deploy your own instance to see live data)*
 - [Medium article](https://medium.com/@adityas2804/i-built-my-own-llm-observability-tool-heres-why-and-how-6ea060562b98)
 
 ---
