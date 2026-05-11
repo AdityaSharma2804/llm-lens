@@ -4,7 +4,7 @@ Automatic observability for OpenAI and Anthropic API calls.
 Tracks latency, token usage, cost, and errors — with a live web dashboard.
 
 [![PyPI version](https://img.shields.io/pypi/v/llm-lens-py)](https://pypi.org/project/llm-lens-py/)
-[![Python](https://img.shields.io/pypi/pyversions/llm-lens-py)](https://pypi.org/project/llm-lens-py/)
+[![Python](https://img.shields.io/badge/python-3.10+-blue)](https://pypi.org/project/llm-lens-py/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ![llm-lens dashboard](docs/dashboard.png)
