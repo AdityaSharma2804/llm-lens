@@ -5,11 +5,10 @@
 [![PyPI version](https://img.shields.io/pypi/v/llm-lens-py)](https://pypi.org/project/llm-lens-py/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Live Dashboard](https://img.shields.io/badge/demo-live-brightgreen)](https://llm-lens.onrender.com)
 
 llm-lens is an open-source Python SDK that automatically intercepts every OpenAI and Anthropic API call in your application — tracking latency, token usage, cost, model, and errors — with zero code changes. Just add one import.
 
-> > **Install:** `pip install llm-lens-py` | **Article:** [Medium](https://medium.com/@adityas2804/i-built-my-own-llm-observability-tool-heres-why-and-how-6ea060562b98)
+> **Install:** `pip install llm-lens-py` | **Article:** [Medium](https://medium.com/@adityas2804/i-built-my-own-llm-observability-tool-heres-why-and-how-6ea060562b98)
 
 ---
 
@@ -228,7 +227,6 @@ pip install llm-lens-py
 ## Links
 
 - **PyPI:** [pypi.org/project/llm-lens-py](https://pypi.org/project/llm-lens-py/)
-- **Live Dashboard:** [llm-lens.onrender.com](https://llm-lens.onrender.com)
 - **Medium Article:** [How I built an LLM observability tool](https://medium.com/@adityas2804/i-built-my-own-llm-observability-tool-heres-why-and-how-6ea060562b98)
 - **Dev.to Article:** [dev.to/adityasharma2804](https://dev.to/adityasharma2804/i-built-my-own-llm-observability-tool-heres-why-and-how-3619)
 
