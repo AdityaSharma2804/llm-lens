@@ -1,7 +1,6 @@
 # llm-lens
 
-Automatic observability for OpenAI and Anthropic API calls.  
-Tracks latency, token usage, cost, and errors — with a live web dashboard.
+Automatically track OpenAI and Anthropic API costs, latency, and token usage in Python with zero code changes. Add import llm_lens to any project - no configuration required.
 
 [![PyPI version](https://img.shields.io/pypi/v/llm-lens-py)](https://pypi.org/project/llm-lens-py/)
 [![Python](https://img.shields.io/badge/python-3.10+-blue)](https://pypi.org/project/llm-lens-py/)
