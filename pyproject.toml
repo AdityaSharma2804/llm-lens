@@ -4,7 +4,10 @@ build-backend = "hatchling.build"
 
 [project]
 name = "llm-lens-py"
-version = "0.1.2"
+authors = [
+  {name = "Aditya Sharma", email = "adityas2804@gmail.com"}
+]
+version = "0.1.6"
 description = "Automatic observability for LLM API calls"
 requires-python = ">=3.10"
 dependencies = [
@@ -19,4 +22,3 @@ llm-lens = "llm_lens.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/llm_lens"]
-
