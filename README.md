@@ -9,7 +9,7 @@
 
 llm-lens is an open-source Python SDK that automatically intercepts every OpenAI and Anthropic API call in your application — tracking latency, token usage, cost, model, and errors — with zero code changes. Just add one import.
 
-> **Install:** `pip install llm-lens-py` | **Demo:** [llm-lens.onrender.com](https://llm-lens.onrender.com) | **Article:** [Medium](https://medium.com/@adityas2804/i-built-my-own-llm-observability-tool-heres-why-and-how-6ea060562b98)
+> > **Install:** `pip install llm-lens-py` | **Article:** [Medium](https://medium.com/@adityas2804/i-built-my-own-llm-observability-tool-heres-why-and-how-6ea060562b98)
 
 ---
 
@@ -45,6 +45,21 @@ response = client.chat.completions.create(
 
 That's it. No decorators. No wrappers. No config files. No account signup.
 
+Works the same for Anthropic:
+
+```python
+import llm_lens
+import anthropic
+
+client = anthropic.Anthropic()
+response = client.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=1024,
+    messages=[{"role": "user", "content": "hello"}]
+)
+# also tracked automatically
+```
+
 ---
 
 ## How It Works
@@ -68,15 +83,26 @@ Your existing code gets the exact same response. The only difference is that eve
 No SDK changes. No account. No config. Just `import llm_lens` at the top of your file.
 
 ### CLI — instant terminal visibility
+
 ```bash
-llm-lens                              # rich table of all tracked calls
-llm-lens stats                        # total calls, error rate, avg latency, total cost
-llm-lens serve                        # live dashboard at localhost:8000
+llm-lens                                  # rich table of all tracked calls
+llm-lens stats                            # total calls, error rate, avg latency, total cost
+llm-lens serve                            # live dashboard at localhost:8000
 llm-lens config set cost_alert_usd 0.10  # set a cost alert threshold
 ```
 
+**`llm-lens` — table view of every tracked call:**
+
+![llm-lens CLI table](docs/cli-table.png)
+
+**`llm-lens stats` — aggregated stats panel:**
+
+![llm-lens CLI stats](docs/cli-stats.png)
+
 ### Live web dashboard
+
 Run `llm-lens serve` and open `http://localhost:8000`:
+
 - Stats bar: total calls, error rate, avg latency, total cost
 - Latency per call line chart (Chart.js)
 - Error per call bar chart with red/green color coding
